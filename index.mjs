@@ -13,7 +13,7 @@ const ORIGINAL = Symbol.for('cordis.original');
 const WRAPPED = Symbol.for('dsh-image-edge-cap.wrapped');
 
 /** DSH releases this version was tested against (unit tests plus a real Cordis mount). */
-export const TESTED_DSH_VERSIONS = Object.freeze(['0.2.0-rc.1']);
+export const TESTED_DSH_VERSIONS = Object.freeze(['0.2.0-rc.1', '0.2.0-rc.2']);
 
 /**
  * Versions accepted without `allowUntestedHarness`. The request-image path

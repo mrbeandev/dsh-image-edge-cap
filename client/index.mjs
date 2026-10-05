@@ -146,6 +146,7 @@ export function createClientPlugin(require) {
       alignSelf: 'flex-start', padding: '4px 12px', border: '1px solid var(--dsw-alias-border-l2)', borderRadius: '6px',
       background: 'transparent', color: 'inherit', font: 'inherit', cursor: 'pointer',
     },
+    buttonDisabled: { opacity: 0.45, cursor: 'default' },
     status: { margin: 0, color: 'var(--dsw-alias-label-secondary)' },
     error: { margin: 0, color: 'var(--dsw-alias-state-error-primary)' },
   };
@@ -234,7 +235,8 @@ export function createClientPlugin(require) {
           }),
           current.mode === 'off' ? null : h('span', { style: styles.unit }, 'px'),
           h('button', {
-            type: 'button', disabled: disabled || !dirty, style: styles.button,
+            type: 'button', disabled: disabled || !dirty,
+            style: disabled || !dirty ? { ...styles.button, ...styles.buttonDisabled } : styles.button,
             onClick: () => onSave(row.route, current),
           }, 'Apply'))),
       picker);

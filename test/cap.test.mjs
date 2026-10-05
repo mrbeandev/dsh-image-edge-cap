@@ -52,12 +52,12 @@ test('longEdgeDimensions never returns a zero side', () => {
 
 test('capFor: off, all, selected models', () => {
   const rules = {
-    '9router': { mode: 'selected', models: ['cc/claude-opus-5-5', 'cc/claude-sonnet-5-5'], maxImageEdge: 2000 },
+    'a-router': { mode: 'selected', models: ['cc/claude-a', 'cc/claude-b'], maxImageEdge: 2000 },
     anthropic: { mode: 'all', models: [], maxImageEdge: 1568 },
     deepseek: { mode: 'off', models: ['x'], maxImageEdge: 1000 },
   };
-  assert.equal(capFor(rules, '9router', 'cc/claude-opus-5-5'), 2000);
-  assert.equal(capFor(rules, '9router', 'cx/gpt-6-sol'), undefined, 'unselected model of a selected provider');
+  assert.equal(capFor(rules, 'a-router', 'cc/claude-a'), 2000);
+  assert.equal(capFor(rules, 'a-router', 'cx/gpt-a'), undefined, 'unselected model of a selected provider');
   assert.equal(capFor(rules, 'anthropic', 'anything'), 1568);
   assert.equal(capFor(rules, 'anthropic', undefined), 1568);
   assert.equal(capFor(rules, 'deepseek', 'x'), undefined);

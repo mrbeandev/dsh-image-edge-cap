@@ -16,17 +16,17 @@ function store(initial) {
 }
 
 const REGISTERED = [
-  { id: '9router', name: '9router' },
+  { id: 'a-router', name: 'a-router' },
   { id: 'deepseek-official', name: 'DeepSeek' },
 ];
 const CATALOG = {
-  default: { provider: '9router', model: 'cc/claude-opus-5-5' },
-  routableProviders: ['9router', 'deepseek-official'],
+  default: { provider: 'a-router', model: 'cc/claude-a' },
+  routableProviders: ['a-router', 'deepseek-official'],
   groups: [
-    { id: '9router', name: '9router', models: [
-      { id: 'cc/claude-opus-5-5', name: 'Claude Opus 5.5' },
-      { id: 'cc/claude-sonnet-5-5', name: 'Claude Sonnet 5.5' },
-      { id: 'cx/gpt-6-sol', name: 'cx/gpt-6-sol' },
+    { id: 'a-router', name: 'a-router', models: [
+      { id: 'cc/claude-a', name: 'Claude A' },
+      { id: 'cc/claude-b', name: 'Claude B' },
+      { id: 'cx/gpt-a', name: 'GPT A' },
     ] },
     { id: 'deepseek-official', name: 'DeepSeek', models: [{ id: 'deepseek-chat', name: 'DeepSeek Chat' }] },
   ],
@@ -194,7 +194,7 @@ test('every provider starts Off, with no edge input or model list', async () => 
   const tree = (await loaded(harness())).render();
   assert.equal(nodes(tree, n => n.type === 'h2')[0].children.join(''), 'Image size');
   assert.equal(nodes(tree, n => n.props?.role === 'note').length, 1);
-  assert.deepEqual(labels(tree), ['9router', 'DeepSeek']);
+  assert.deepEqual(labels(tree), ['a-router', 'DeepSeek']);
   for (const row of rowsOf(tree)) {
     assert.equal(selectOf(row).value, 'off');
     assert.equal(edgeOf(row), undefined);
@@ -210,7 +210,7 @@ test('All models: writes the whole-provider rule with the default edge', async (
   act(p, 0, row => selectOf(row).onChange({ currentTarget: { value: 'all' } }));
   assert.equal(edgeOf(rowsOf(p.render())[0]).value, '2000');
   await apply(p, 0);
-  assert.deepEqual(h.calls, [{ ops: [{ op: 'set', path: ['providers', '9router'], value: { mode: 'all', models: [], maxImageEdge: 2000 } }], revision: 4 }]);
+  assert.deepEqual(h.calls, [{ ops: [{ op: 'set', path: ['providers', 'a-router'], value: { mode: 'all', models: [], maxImageEdge: 2000 } }], revision: 4 }]);
   assert.match(textOf(p.render()), /all models capped at 2000 px/);
   assert.match(textOf(p.render()), /Providers \(1 capped\)/);
 });
@@ -225,8 +225,8 @@ test('Selected models: lists the provider models as checkboxes and saves only th
   row = act(p, 0, r => checksOf(r)[0].onChange());
   act(p, 0, r => edgeOf(r).onChange({ currentTarget: { value: '1568' } }));
   await apply(p, 0);
-  assert.deepEqual(h.calls[0].ops, [{ op: 'set', path: ['providers', '9router'], value: {
-    mode: 'selected', models: ['cc/claude-opus-5-5', 'cc/claude-sonnet-5-5'], maxImageEdge: 1568,
+  assert.deepEqual(h.calls[0].ops, [{ op: 'set', path: ['providers', 'a-router'], value: {
+    mode: 'selected', models: ['cc/claude-a', 'cc/claude-b'], maxImageEdge: 1568,
   } }]);
   row = rowsOf(p.render())[0];
   assert.deepEqual(checksOf(row).map(c => c.checked), [true, true, false]);
@@ -243,7 +243,7 @@ test('Selected with no model checked is refused without a write', async () => {
 });
 
 test('saved rules restore: mode, edge and checked models', async () => {
-  const value = { providers: { '9router': { mode: 'selected', models: ['cx/gpt-6-sol'], maxImageEdge: 1800 } } };
+  const value = { providers: { 'a-router': { mode: 'selected', models: ['cx/gpt-a'], maxImageEdge: 1800 } } };
   const row = rowsOf((await loaded(harness({ value }))).render())[0];
   assert.equal(selectOf(row).value, 'selected');
   assert.equal(edgeOf(row).value, '1800');
@@ -251,11 +251,11 @@ test('saved rules restore: mode, edge and checked models', async () => {
 });
 
 test('Off removes the provider rule', async () => {
-  const h = harness({ value: { providers: { '9router': { mode: 'all', models: [], maxImageEdge: 2000 } } } });
+  const h = harness({ value: { providers: { 'a-router': { mode: 'all', models: [], maxImageEdge: 2000 } } } });
   const p = await loaded(h);
   act(p, 0, r => selectOf(r).onChange({ currentTarget: { value: 'off' } }));
   await apply(p, 0);
-  assert.deepEqual(h.calls, [{ ops: [{ op: 'unset', path: ['providers', '9router'] }], revision: 4 }]);
+  assert.deepEqual(h.calls, [{ ops: [{ op: 'unset', path: ['providers', 'a-router'] }], revision: 4 }]);
   assert.equal(selectOf(rowsOf(p.render())[0]).value, 'off');
 });
 
@@ -272,7 +272,7 @@ test('invalid edges are refused without a write', async () => {
 });
 
 test('a selected model the catalog no longer lists stays visible so it can be cleared', async () => {
-  const value = { providers: { '9router': { mode: 'selected', models: ['cc/retired-model'], maxImageEdge: 2000 } } };
+  const value = { providers: { 'a-router': { mode: 'selected', models: ['cc/retired-model'], maxImageEdge: 2000 } } };
   const row = rowsOf((await loaded(harness({ value }))).render())[0];
   assert.equal(checksOf(row).length, 4);
   assert.equal(checksOf(row)[3].checked, true);
@@ -365,7 +365,7 @@ test('pure helpers ignore malformed data', () => {
   const { buildRows, findEntryNamespace, normalizeRule, draftToOp } = createClientPlugin(() => ({}));
   assert.equal(buildRows({ registered: null, groups: null, rules: null }).length, 0);
   const rows = buildRows({
-    registered: [{ id: 'cc', name: '9router' }, { id: '' }, null, { id: 7 }],
+    registered: [{ id: 'cc', name: 'a-router' }, { id: '' }, null, { id: 7 }],
     groups: [{ id: 'cc', models: [{ id: 'm1' }, null, { id: '' }] }, { id: 5 }],
     rules: { weird: { mode: 'selected', models: [] }, bad: 'x', cc: { mode: 'all' } },
   });

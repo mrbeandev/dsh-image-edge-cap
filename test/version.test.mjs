@@ -15,7 +15,7 @@ test('classifyVersion: tested releases are exact', () => {
 });
 
 test('classifyVersion: untested in-range releases load with a warning', () => {
-  assert.equal(classifyVersion('0.2.0-rc.2'), 'compatible');
+  assert.equal(classifyVersion('0.2.1-alpha.1'), 'compatible');
   assert.equal(classifyVersion('0.2.1'), 'compatible');
 });
 

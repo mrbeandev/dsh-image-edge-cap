@@ -2,6 +2,7 @@
   "name": "dsh-image-edge-cap",
   "version": "0.1.0",
   "description": "Caps the longest side of images sent to chosen providers or models in DeepSeek Harness, with its own Settings tab",
+  "author": "mrbeandev and contributors",
   "type": "module",
   "main": "./index.mjs",
   "repository": {
@@ -25,14 +26,21 @@
     "dsh",
     "deepseek-harness",
     "dsh-plugin",
+    "dsh-plugins",
+    "plugin",
+    "llm",
     "images",
+    "image-resize",
     "anthropic",
-    "llm"
+    "claude",
+    "vision"
   ],
   "scripts": {
     "build": "node scripts/build-client.mjs",
     "test": "node --test test/*.test.mjs",
     "test:integration": "node scripts/test-integration.mjs",
+    "test:e2e": "node scripts/e2e-gui.mjs",
+    "verify": "npm run build && npm test && node scripts/check-release.mjs",
     "prepack": "npm run build && npm test",
     "pack:check": "npm pack --dry-run",
     "prepublishOnly": "node scripts/check-release.mjs"
@@ -71,6 +79,9 @@
         "@deepseek-ai/dsh-api-remotes",
         "@deepseek-ai/dsh-api-session-controller"
       ]
+    },
+    "engines": {
+      "dsh": ">=0.2.0-rc.1 <0.3.0"
     }
   }
 }
