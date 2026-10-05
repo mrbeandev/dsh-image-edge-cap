@@ -1,0 +1,14 @@
+node_modules/
+.cache/
+*.tgz
+.env
+.env.*
+!.env.example
+local.patch.yml
+
+# Local design brief: contains private session ids and paths; never commit.
+INFO.md
+# Local test output
+*.log
+# Disposable DSH home for end-to-end tests
+.e2e/

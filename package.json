@@ -1,0 +1,76 @@
+{
+  "name": "dsh-image-edge-cap",
+  "version": "0.1.0",
+  "description": "Caps the longest side of images sent to chosen providers or models in DeepSeek Harness, with its own Settings tab",
+  "type": "module",
+  "main": "./index.mjs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrbeandev/dsh-image-edge-cap.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mrbeandev/dsh-image-edge-cap/issues"
+  },
+  "homepage": "https://github.com/mrbeandev/dsh-image-edge-cap#readme",
+  "exports": {
+    ".": "./index.mjs",
+    "./client": "./lib/client.js",
+    "./package.json": "./package.json"
+  },
+  "engines": {
+    "node": "^22.19.0 || >=24.0.0"
+  },
+  "license": "MIT",
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "dsh-plugin",
+    "images",
+    "anthropic",
+    "llm"
+  ],
+  "scripts": {
+    "build": "node scripts/build-client.mjs",
+    "test": "node --test test/*.test.mjs",
+    "test:integration": "node scripts/test-integration.mjs",
+    "prepack": "npm run build && npm test",
+    "pack:check": "npm pack --dry-run",
+    "prepublishOnly": "node scripts/check-release.mjs"
+  },
+  "files": [
+    "index.mjs",
+    "cap.mjs",
+    "client/index.mjs",
+    "lib/client.js",
+    "scripts/*.mjs",
+    "test/*.test.mjs",
+    "cordis.patch.yml",
+    "README.md",
+    "RELEASE.md",
+    "LICENSE"
+  ],
+  "peerDependencies": {
+    "@deepseek-ai/dsh": ">=0.2.0-rc.1 <0.3.0"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/dsh": {
+      "optional": true
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-settings",
+        "@deepseek-ai/dsh-api-remotes",
+        "@deepseek-ai/dsh-api-session-controller"
+      ]
+    }
+  }
+}
