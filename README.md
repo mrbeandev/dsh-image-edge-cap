@@ -162,9 +162,11 @@ service appears, removed when the plugin is disposed, and never installed
 twice. The version gate refuses DSH releases outside the tested range, so a
 changed internal API makes the plugin refuse to load instead of misbehaving.
 
-- It only affects images the **pi-ai** adapter sends (custom OpenAI-compatible,
-  Anthropic and other pi-ai providers). Native DeepSeek adapters don't send
-  images through this path.
+- It applies to any adapter that prepares request images through the
+  attachment store's `readImageRequest`. On DSH 0.2 that includes the **pi-ai**
+  adapter (custom OpenAI-compatible, Anthropic and other pi-ai providers),
+  which is what the tests cover, and the native DeepSeek adapter, so a rule on
+  a DeepSeek provider applies too. Providers you leave **Off** are untouched.
 - It never enlarges an image and never undoes DSH's own pixel or byte budgets;
   it can only make the request image smaller.
 - Images DSH has already offloaded from the request are not touched.
